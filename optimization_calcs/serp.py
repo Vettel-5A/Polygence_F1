@@ -42,18 +42,17 @@ class Optimization():
                     closest = test
                     airport_name = item
             self.total_distance += closest
-            print(f"Total Distance: {self.total_distance}")
 
             self.ordered_airports.append(airport_name)
             self.airports_remaining.remove(airport_name)
             airport1 = airport_name
 
-            print(self.total_distance)
-
             count = 1
             for country in self.ordered_airports: 
                 print(f"{count}: {country} \n")
                 count += 1
+                
+            print(f"Total Distance: {self.total_distance}")
 
     def airport2airport(self, airport1, airport2):
         
