@@ -4,7 +4,7 @@ import pandas as pd
 
 class Optimization():
     def __init__(self):
-        self.airports_df = pd.read_csv('CodeSample/coordinates/circuit_coordinates.csv')
+        self.airports_df = pd.read_csv('coordinates/circuit_coordinates.csv')
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
@@ -41,7 +41,9 @@ class Optimization():
                 if test < closest:
                     closest = test
                     airport_name = item
-                    self.total_distance += test
+            self.total_distance += closest
+            print(f"Total Distance: {self.total_distance}")
+
             self.ordered_airports.append(airport_name)
             self.airports_remaining.remove(airport_name)
             airport1 = airport_name
