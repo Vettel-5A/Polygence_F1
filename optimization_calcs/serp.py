@@ -53,6 +53,7 @@ class Optimization():
                 count += 1
                 
             print(f"Total Distance: {self.total_distance}")
+            print(self.ordered_airports)
 
     def airport2airport(self, airport1, airport2):
         
