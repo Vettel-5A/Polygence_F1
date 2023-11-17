@@ -1,7 +1,7 @@
-from serp import Airports
+from optimization_calcs.serp import Optimization
 
-airports = Airports()
+optimize = Optimization()
 
-air1 = input("Choose airport1: ")
+country = input("Choose airport1: ")
 
-airports.order_algo(air1)
+optimize.order_races(country)
