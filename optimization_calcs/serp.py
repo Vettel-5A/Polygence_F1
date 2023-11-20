@@ -5,6 +5,7 @@ import pandas as pd
 class Optimization():
     def __init__(self):
         self.airports_df = pd.read_csv('coordinates/circuit_coordinates.csv')
+        self.europe_df = pd.read_csv('coordinates/europe_coordinates.csv')
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
@@ -72,5 +73,25 @@ class Optimization():
         distance = geodesic(airport1_coords, airport2_coords).kilometers
         return distance
         
+    # def euro_detect(self, ordered_races):
+    #     euro_races = []
+        
+    #     for item in range(0, 10):
+    #         euro_races.append(self.europe_df["Circuit"][item])
+
+    #     for x in range(0, 23):
+    #         if ordered_races[x] in euro_races:
+    #             if ordered_races[x+1] in euro_races:
+    #                 euro_calculate(ordered_races[x], ordered_races[x+1])                    
+
+    # def euro_calculate(self, euro1, euro2):
+    #     
+    #    for x in range(0, , ):
+    #        if euro1 == self.airports_df["Airport"][x]:
+    #            airport1_num = x
+    #        if airport2 == self.airports_df["Airport"][x]:
+    #            airport2_num = x
+
+
                 
 
