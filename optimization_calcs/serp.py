@@ -1,6 +1,6 @@
 from geopy.distance import geodesic
 import pandas as pd
-from optimization_calcs.europe import EuroSpecific
+from optimization_calcs.drive import EuroSpecific
 
 
 class Optimization():
@@ -11,6 +11,9 @@ class Optimization():
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
+        self.driving_distance = 0
+        self.flying_distance = 0
+        self.drive = False
         self.euro = EuroSpecific()
    
     def order_races(self, airport1):
@@ -46,6 +49,10 @@ class Optimization():
                     closest = self.euro_recalc(airport1, item, test)
                     airport_name = item
             self.total_distance += closest
+            if self.drive == True:
+                self.driving_distance += closest
+            else:
+                self.flying_distance += closest
 
             self.ordered_airports.append(airport_name)
             self.airports_remaining.remove(airport_name)
@@ -58,6 +65,8 @@ class Optimization():
                 
             print(f"Total Distance: {self.total_distance}")
             print(self.ordered_airports)
+            print(f"Flying distance: {self.flying_distance}")
+            print(f"Driving distance: {self.driving_distance}")
 
     def airport2airport(self, airport1, airport2):
         
@@ -90,11 +99,14 @@ class Optimization():
 
         if exist1 and exist2:
             print("getting driving distance")
-            circuit1_coords = f"{self.circuits_df['Latitude'][circuit1_num]}, {self.circuits_df['Longitude'][circuit1_num]}"
-            circuit2_coords = f"{self.circuits_df['Latitude'][circuit2_num]}, {self.circuits_df['Longitude'][circuit2_num]}"
+            circuit1_coords = f"{self.europe_df['Latitude'][circuit1_num]}, {self.europe_df['Longitude'][circuit1_num]}"
+            circuit2_coords = f"{self.europe_df['Latitude'][circuit2_num]}, {self.europe_df['Longitude'][circuit2_num]}"
             print(circuit1_coords)
             print(circuit2_coords)
-            return self.euro.get_driving_distance(circuit1_coords, circuit2_coords)
+            drive_distance = self.euro.get_driving_distance(circuit1_coords, circuit2_coords)
+            self.drive = True
+            return drive_distance
 
         else:
+            self.drive = False
             return test_distance
