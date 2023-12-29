@@ -1,14 +1,17 @@
 from geopy.distance import geodesic
 import pandas as pd
+from optimization_calcs.europe import EuroSpecific
 
 
 class Optimization():
     def __init__(self):
-        self.airports_df = pd.read_csv('coordinates/circuit_coordinates.csv')
-        self.europe_df = pd.read_csv('coordinates/europe_coordinates.csv')
+        self.airports_df = pd.read_csv('CodeSample/coordinates/airport_coordinates.csv')
+        self.circuits_df = pd.read_csv('CodeSample/coordinates/circuit_coordinates.csv')
+        self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
+        self.euro = EuroSpecific()
    
     def order_races(self, airport1):
 
@@ -40,7 +43,7 @@ class Optimization():
                 test = self.airport2airport(airport1, item)
                 print(f"{item} Test Dist: {test}")
                 if test < closest:
-                    closest = test
+                    closest = self.euro_recalc(airport1, item, test)
                     airport_name = item
             self.total_distance += closest
 
@@ -72,26 +75,26 @@ class Optimization():
         # Calculate the distance
         distance = geodesic(airport1_coords, airport2_coords).kilometers
         return distance
-        
-    # def euro_detect(self, ordered_races):
-    #     euro_races = []
-        
-    #     for item in range(0, 10):
-    #         euro_races.append(self.europe_df["Circuit"][item])
 
-    #     for x in range(0, 23):
-    #         if ordered_races[x] in euro_races:
-    #             if ordered_races[x+1] in euro_races:
-    #                 euro_calculate(ordered_races[x], ordered_races[x+1])                    
+    def euro_recalc(self, circuit1, circuit2, test_distance):
+        exist1 = False
+        exist2 = False
+        for x in range(0, 9):
+            if circuit1 == self.europe_df["Circuit"][x]:
+                circuit1_num = x
+                exist1 = True
 
-    # def euro_calculate(self, euro1, euro2):
-    #     
-    #    for x in range(0, , ):
-    #        if euro1 == self.airports_df["Airport"][x]:
-    #            airport1_num = x
-    #        if airport2 == self.airports_df["Airport"][x]:
-    #            airport2_num = x
+            if circuit2 == self.europe_df["Circuit"][x]:
+                circuit2_num = x
+                exist2 = True
 
+        if exist1 and exist2:
+            print("getting driving distance")
+            circuit1_coords = f"{self.circuits_df['Latitude'][circuit1_num]}, {self.circuits_df['Longitude'][circuit1_num]}"
+            circuit2_coords = f"{self.circuits_df['Latitude'][circuit2_num]}, {self.circuits_df['Longitude'][circuit2_num]}"
+            print(circuit1_coords)
+            print(circuit2_coords)
+            return self.euro.get_driving_distance(circuit1_coords, circuit2_coords)
 
-                
-
+        else:
+            return test_distance
