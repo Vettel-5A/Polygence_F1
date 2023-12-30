@@ -4,7 +4,7 @@ import private.secret
 import requests
 
 
-class EuroSpecific:
+class DriveSpecific:
     def __init__(self):
         self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
         self.api_url = "http://www.mapquestapi.com/directions/v2/route"

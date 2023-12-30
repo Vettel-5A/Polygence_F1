@@ -1,6 +1,6 @@
 from geopy.distance import geodesic
 import pandas as pd
-from optimization_calcs.drive import EuroSpecific
+from optimization_calcs.drive import DriveSpecific
 
 
 class Optimization():
@@ -8,13 +8,14 @@ class Optimization():
         self.airports_df = pd.read_csv('CodeSample/coordinates/airport_coordinates.csv')
         self.circuits_df = pd.read_csv('CodeSample/coordinates/circuit_coordinates.csv')
         self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
+        self.euro_dict = self.europe_df.to_dict()
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
         self.driving_distance = 0
         self.flying_distance = 0
         self.drive = False
-        self.euro = EuroSpecific()
+        self.euro = DriveSpecific()
    
     def order_races(self, airport1):
 
@@ -58,10 +59,13 @@ class Optimization():
                 self.driving_distance += closest
             else:
                 self.flying_distance += closest
-                airport_to_circuit_commute = float(self.airport_to_circuit(airport1))
-                self.total_distance += airport_to_circuit_commute
-                self.driving_distance += airport_to_circuit_commute
-            self.drive = False
+            #     airport_to_circuit_commute = float(self.airport_to_circuit(airport1))
+            #     for x in range(0, 9):
+            #         if airport1 == self.airports_df["Airport"][x]:
+            #             airport1_num = x
+            #     self.total_distance += airport_to_circuit_commute
+            #     self.driving_distance += airport_to_circuit_commute
+            # self.drive = False
 
 
             self.ordered_airports.append(airport_name)
@@ -77,6 +81,12 @@ class Optimization():
             print(self.ordered_airports)
             print(f"Flying distance: {self.flying_distance}")
             print(f"Driving distance: {self.driving_distance}")
+
+        self.airport_to_circuit()
+        print(f"Total Distance: {self.total_distance}")
+        print(self.ordered_airports)
+        print(f"Flying distance: {self.flying_distance}")
+        print(f"Driving distance: {self.driving_distance}")
 
     def airport2airport(self, airport1, airport2):
         
@@ -119,14 +129,38 @@ class Optimization():
         else:
             return test_distance
 
-    def airport_to_circuit(self, place):
-        print(place)
-        for x in range(0, 25):
-            if place == self.airports_df["Airport"][x]:
+    def airport_to_circuit(self):
+        for x in range(1, 23):
+            if self.ordered_airports[x] not in self.euro_dict['Circuit'].values():
                 place_index = x
             
                 airport_coords = f"{self.airports_df['Latitude'][place_index]}, {self.airports_df['Longitude'][place_index]}"
                 circuit_coords = f"{self.circuits_df['Latitude'][place_index]}, {self.circuits_df['Longitude'][place_index]}"
 
                 print("Calculating Airport Distance")
-                return self.euro.get_driving_distance(airport_coords, circuit_coords, 0) * 2
+
+                add = self.euro.get_driving_distance(airport_coords, circuit_coords, 0) * 2
+                self.driving_distance += add
+                self.total_distance 
+            else:
+                if self.ordered_airports[x - 1] in self.euro_dict['Circuit'].values():
+                    last_airport_coords = f"{self.airports_df['Latitude'][x-1]}, {self.airports_df['Longitude'][x-1]}"
+                    last_circuit_coords = f"{self.circuits_df['Latitude'][x-1]}, {self.circuits_df['Longitude'][x-1]}"
+                    add_distance = self.euro.get_driving_distance(last_airport_coords, last_circuit_coords, 0)
+                    self.driving_distance += add_distance
+                    self.total_distance += add_distance
+                elif self.ordered_airports[x + 1] in self.euro_dict['Circuit'].values():
+                    next_airport_coords = f"{self.airports_df['Latitude'][x+1]}, {self.airports_df['Longitude'][x+1]}"
+                    next_circuit_coords = f"{self.circuits_df['Latitude'][x+1]}, {self.circuits_df['Longitude'][x+1]}"
+                    add_distance = self.euro.get_driving_distance(next_airport_coords, next_circuit_coords, 0)
+                    self.driving_distance += add_distance
+                    self.total_distance += add_distance
+                
+                # place_index = x
+            
+                # airport_coords = f"{self.airports_df['Latitude'][place_index]}, {self.airports_df['Longitude'][place_index]}"
+                # circuit_coords = f"{self.circuits_df['Latitude'][place_index]}, {self.circuits_df['Longitude'][place_index]}"
+
+                # print("Calculating Airport Distance")
+
+                # return self.euro.get_driving_distance(airport_coords, circuit_coords, 0) * 2
