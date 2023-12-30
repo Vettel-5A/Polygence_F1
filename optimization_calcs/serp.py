@@ -1,6 +1,7 @@
 from geopy.distance import geodesic
 import pandas as pd
 from optimization_calcs.drive import DriveSpecific
+from optimization_calcs.emissions import EmissionCalcs
 
 
 class Optimization():
@@ -16,7 +17,7 @@ class Optimization():
         self.flying_distance = 0
         self.drive = False
         self.euro = DriveSpecific()
-   
+        self.emissions = EmissionCalcs()
     def order_races(self, airport1):
 
         # Finding index of airport1
@@ -83,10 +84,13 @@ class Optimization():
             print(f"Driving distance: {self.driving_distance}")
 
         self.airport_to_circuit()
+
         print(f"Total Distance: {self.total_distance}")
         print(self.ordered_airports)
         print(f"Flying distance: {self.flying_distance}")
         print(f"Driving distance: {self.driving_distance}")
+        
+        self.emissions.find_carbon_emissions(self.driving_distance, self.flying_distance)
 
     def airport2airport(self, airport1, airport2):
         
@@ -141,7 +145,7 @@ class Optimization():
 
                 add = self.euro.get_driving_distance(airport_coords, circuit_coords, 0) * 2
                 self.driving_distance += add
-                self.total_distance 
+                self.total_distance += add
             else:
                 if self.ordered_airports[x - 1] in self.euro_dict['Circuit'].values():
                     last_airport_coords = f"{self.airports_df['Latitude'][x-1]}, {self.airports_df['Longitude'][x-1]}"
