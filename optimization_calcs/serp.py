@@ -15,6 +15,7 @@ class Optimization():
         self.total_distance = 0
         self.driving_distance = 0
         self.flying_distance = 0
+        self.UPGRADE_CONSTANT = 3876.9429
         self.drive = False
         self.euro = DriveSpecific()
         self.emissions = EmissionCalcs()
@@ -85,11 +86,13 @@ class Optimization():
 
         self.airport_to_circuit()
 
+        # self.total_distance += self.UPGRADE_CONSTANT
+        # self.driving_distance += self.UPGRADE_CONSTANT
         print(f"Total Distance: {self.total_distance}")
         print(self.ordered_airports)
         print(f"Flying distance: {self.flying_distance}")
         print(f"Driving distance: {self.driving_distance}")
-        
+
         self.emissions.find_carbon_emissions(self.driving_distance, self.flying_distance)
 
     def airport2airport(self, airport1, airport2):

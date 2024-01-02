@@ -30,5 +30,6 @@ class DriveSpecific:
             return distance
 
         else:
+            print("API NOT WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             return default_distance
 
