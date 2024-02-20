@@ -6,9 +6,9 @@ from optimization_calcs.emissions import EmissionCalcs
 
 class Optimization():
     def __init__(self):
-        self.airports_df = pd.read_csv('CodeSample/coordinates/airport_coordinates.csv')
-        self.circuits_df = pd.read_csv('CodeSample/coordinates/circuit_coordinates.csv')
-        self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
+        self.airports_df = pd.read_csv('coordinates/airport_coordinates.csv')
+        self.circuits_df = pd.read_csv('coordinates/circuit_coordinates.csv')
+        self.europe_df = pd.read_csv('coordinates/europe_coordinates.csv')
         self.euro_dict = self.europe_df.to_dict()
         self.airports_remaining = []
         self.ordered_airports = []
