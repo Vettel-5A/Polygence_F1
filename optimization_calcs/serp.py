@@ -6,15 +6,16 @@ from optimization_calcs.emissions import EmissionCalcs
 
 class Optimization():
     def __init__(self):
-        self.airports_df = pd.read_csv('CodeSample/coordinates/airport_coordinates.csv')
-        self.circuits_df = pd.read_csv('CodeSample/coordinates/circuit_coordinates.csv')
-        self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
+        self.airports_df = pd.read_csv('coordinates/airport_coordinates.csv')
+        self.circuits_df = pd.read_csv('coordinates/circuit_coordinates.csv')
+        self.europe_df = pd.read_csv('coordinates/europe_coordinates.csv')
         self.euro_dict = self.europe_df.to_dict()
         self.airports_remaining = []
         self.ordered_airports = []
         self.total_distance = 0
         self.driving_distance = 0
         self.flying_distance = 0
+        self.UPGRADE_CONSTANT = 3876.9429
         self.drive = False
         self.euro = DriveSpecific()
         self.emissions = EmissionCalcs()
@@ -85,11 +86,13 @@ class Optimization():
 
         self.airport_to_circuit()
 
+        # self.total_distance += self.UPGRADE_CONSTANT
+        # self.driving_distance += self.UPGRADE_CONSTANT
         print(f"Total Distance: {self.total_distance}")
         print(self.ordered_airports)
         print(f"Flying distance: {self.flying_distance}")
         print(f"Driving distance: {self.driving_distance}")
-        
+
         self.emissions.find_carbon_emissions(self.driving_distance, self.flying_distance)
 
     def airport2airport(self, airport1, airport2):

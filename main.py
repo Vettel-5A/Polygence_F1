@@ -7,4 +7,5 @@ euro = DriveSpecific()
 
 country = input("Choose first race: ")
 
+
 optimize.order_races(country)

@@ -6,7 +6,7 @@ import requests
 
 class DriveSpecific:
     def __init__(self):
-        self.europe_df = pd.read_csv('CodeSample/coordinates/europe_coordinates.csv')
+        self.europe_df = pd.read_csv('coordinates/europe_coordinates.csv')
         self.api_url = "http://www.mapquestapi.com/directions/v2/route"
 
     def get_driving_distance(self, start_location, end_location, default_distance):
@@ -30,5 +30,6 @@ class DriveSpecific:
             return distance
 
         else:
+            print("API NOT WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             return default_distance
 
